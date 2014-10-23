@@ -108,7 +108,7 @@ int main(int argc, char *argv[]){
 
 
 	char send[64];
-	printf("Enter Email: ");
+	printf("Enter Recipient: ");
 	scanf("%s", send);
 	sprintf(msg,"RCPT TO:%s\r\n",send);
 	printf("%s",msg);
