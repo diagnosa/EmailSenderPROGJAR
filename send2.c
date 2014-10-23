@@ -10,7 +10,8 @@
 
 #define BUF 1024
 
-
+void b64_decode(char *b64src, char *clrdst);
+void b64_decode(char *b64src, char *clrdst);
 void encodeblock( unsigned char in[], char b64str[], int len );
 void b64_encode(char *clrstr, char *b64dst);
 
@@ -27,8 +28,8 @@ int main(int argc, char *argv[]){
 	struct 	hostent *host;
 	char 	myuse[BUF];
 	char 	mypas[BUF];
-  	char 	myu64[BUF] = "";
-  	char 	myp64[BUF] = "";
+  char 	myu64[BUF] = "";
+  char 	myp64[BUF] = "";
 
 	if(argc<2){fprintf(stderr, "USAGE: <hostname> <port>\n");exit(1);	}
 	host = gethostbyname(argv[1]);
@@ -108,7 +109,7 @@ int main(int argc, char *argv[]){
 
 
 	char send[64];
-	printf("Enter Recipient: ");
+	printf("Enter Email: ");
 	scanf("%s", send);
 	sprintf(msg,"RCPT TO:%s\r\n",send);
 	printf("%s",msg);
@@ -128,8 +129,8 @@ int main(int argc, char *argv[]){
 	scanf("%s", subject);
 	printf("Message: ");
 	scanf("%s", send);
-	sprintf(msg,"subject:%s\n%s\r\n.\r\n",subject,send);
-	 
+	sprintf(msg,"%s\n\n%s\r\n.\r\n",subject,send);
+	
 
 	write(sockfd,msg,strlen(msg));
 	retval=read(sockfd,buff, sizeof(buff)-1);
