@@ -31,9 +31,9 @@ int main(int argc, char *argv[]){
   char 	myu64[BUF] = "";
   char 	myp64[BUF] = "";
 
-	if(argc<2){fprintf(stderr, "USAGE: <hostname> <port>\n");exit(1);	}
+	if(argc<2){fprintf(stderr, "USAGE: <hostname>\n");exit(1);	}
 	host = gethostbyname(argv[1]);
-	port = htons(atoi(argv[2]));
+	port = htons(atoi("25"));
 
 	if(host==NULL){herror("gethostbyname");exit(-1);}
 																	//printf("Official name is: %s\n", host->h_name);
@@ -108,8 +108,8 @@ int main(int argc, char *argv[]){
 	printf("%s", buff);
 
 
-	char send[64];
-	printf("Enter Email: ");
+	char send[128];
+	printf("Enter Recipient: ");
 	scanf("%s", send);
 	sprintf(msg,"RCPT TO:%s\r\n",send);
 	printf("%s",msg);
@@ -120,16 +120,15 @@ int main(int argc, char *argv[]){
 
 	strcpy(msg,"data\r\n");
 	write(sockfd,msg,strlen(msg));
-	retval=read(sockfd,buff, sizeof(buff)-1);
-	buff[retval]='\0';
-	printf("%s", buff);
 
-	char subject[16];
+	char subject[32], sub[96];
+	strcpy(sub,"Subject: ");
 	printf("Subject: ");
-	scanf("%s", subject);
+	gets(subject);
+	strcat(sub, subject);
 	printf("Message: ");
-	scanf("%s", send);
-	sprintf(msg,"%s\n\n%s\r\n.\r\n",subject,send);
+	gets(send);
+	sprintf(msg,"%s\n\n%s\r\n.\r\n",sub,send);
 	
 
 	write(sockfd,msg,strlen(msg));
