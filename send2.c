@@ -128,7 +128,7 @@ int main(int argc, char *argv[]){
 	strcat(sub, subject);
 	printf("Message: ");
 	gets(send);
-	sprintf(msg,"%s\n\n%s\r\n.\r\n",sub,send);
+	sprintf(msg,"%s\r\n\r\n%s\r\n.\r\n",sub,send);
 	
 
 	write(sockfd,msg,strlen(msg));
