@@ -122,10 +122,13 @@ int main(int argc, char *argv[]){
 
 	char subject[16];
 	printf("Subject: ");
-	scanf("%s", subject);
+	getchar();
+	//scanf("%s", subject);
+	gets(subject);
 	printf("Message: ");
-	scanf("%s", send);
-	sprintf(msg,"subject:%s\n%s\r\n.\r\n",subject,send);
+	//scanf("%s", send);
+	gets(send);
+	sprintf(msg,"subject:%s\r\n%s\r\n.\r\n",subject,send);
 	 
 
 	write(sockfd,msg,strlen(msg));
