@@ -7,14 +7,10 @@
 #include <arpa/inet.h>
 #include <string.h>
 #include <stdlib.h>
-
 #define BUF 1024
 
-void b64_decode(char *b64src, char *clrdst);
-void b64_decode(char *b64src, char *clrdst);
 void encodeblock( unsigned char in[], char b64str[], int len );
 void b64_encode(char *clrstr, char *b64dst);
-
 
 int main(int argc, char *argv[]){
 	int 	sockfd, retval;
@@ -28,12 +24,12 @@ int main(int argc, char *argv[]){
 	struct 	hostent *host;
 	char 	myuse[BUF];
 	char 	mypas[BUF];
-  char 	myu64[BUF] = "";
-  char 	myp64[BUF] = "";
+  	char 	myu64[BUF] = "";
+  	char 	myp64[BUF] = "";
 
-	if(argc<2){fprintf(stderr, "USAGE: <hostname>\n");exit(1);	}
+	if(argc<2){fprintf(stderr, "USAGE: <hostname> <port>\n");exit(1);	}
 	host = gethostbyname(argv[1]);
-	port = htons(atoi("25"));
+	port = htons(atoi(argv[2]));
 
 	if(host==NULL){herror("gethostbyname");exit(-1);}
 																	//printf("Official name is: %s\n", host->h_name);
@@ -108,8 +104,8 @@ int main(int argc, char *argv[]){
 	printf("%s", buff);
 
 
-	char send[128];
-	printf("Enter Recipient: ");
+	char send[64];
+	printf("Enter Email: ");
 	scanf("%s", send);
 	sprintf(msg,"RCPT TO:%s\r\n",send);
 	printf("%s",msg);
@@ -120,16 +116,17 @@ int main(int argc, char *argv[]){
 
 	strcpy(msg,"data\r\n");
 	write(sockfd,msg,strlen(msg));
+	retval=read(sockfd,buff, sizeof(buff)-1);
+	buff[retval]='\0';
+	printf("%s", buff);
 
-	char subject[32], sub[96];
-	strcpy(sub,"Subject: ");
+	char subject[16];
 	printf("Subject: ");
-	gets(subject);
-	strcat(sub, subject);
+	scanf("%s", subject);
 	printf("Message: ");
-	gets(send);
-	sprintf(msg,"%s\r\n\r\n%s\r\n.\r\n",sub,send);
-	
+	scanf("%s", send);
+	sprintf(msg,"subject:%s\n%s\r\n.\r\n",subject,send);
+	 
 
 	write(sockfd,msg,strlen(msg));
 	retval=read(sockfd,buff, sizeof(buff)-1);
@@ -154,15 +151,15 @@ void decodeblock(unsigned char in[], char *clrstr) {
   strncat(clrstr, out, sizeof(out));
 }
 
-void b64_decode(char *b64src, char *clrdst) {
+void b64_decode(char *src, char *clrdst) {
   int c, phase, i;
   unsigned char in[4];
   char *p;
 
   clrdst[0] = '\0';
   phase = 0; i=0;
-  while(b64src[i]) {
-    c = (int) b64src[i];
+  while(src[i]) {
+    c = (int) src[i];
     if(c == '=') {
       decodeblock(in, clrdst); 
       break;
